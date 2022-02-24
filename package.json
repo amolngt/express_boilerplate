@@ -1,0 +1,29 @@
+{
+  "name": "express_boilerplate",
+  "version": "1.0.0",
+  "description": "express boilerplate code",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/amolngt/express_boilerplate.git"
+  },
+  "author": "Amol Ngt",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/amolngt/express_boilerplate/issues"
+  },
+  "homepage": "https://github.com/amolngt/express_boilerplate#readme",
+  "dependencies": {
+    "cors": "2.8.5",
+    "express": "4.17.3",
+    "express-mongo-sanitize": "2.2.0",
+    "express-rate-limit": "6.3.0",
+    "helmet": "5.0.2",
+    "http-status": "1.5.0",
+    "localStorage": "^1.0.4",
+    "xss-clean": "0.1.1"
+  }
+}

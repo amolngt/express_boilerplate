@@ -4,7 +4,9 @@
   "description": "express boilerplate code",
   "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest",
+    "test:watch": "jest --watchAll",
+    "start": "node src/server.js"
   },
   "repository": {
     "type": "git",
@@ -23,7 +25,12 @@
     "express-rate-limit": "6.3.0",
     "helmet": "5.0.2",
     "http-status": "1.5.0",
-    "localStorage": "^1.0.4",
+    "localStorage": "1.0.4",
     "xss-clean": "0.1.1"
+  },
+  "devDependencies": {
+    "eslint": "8.10.0",
+    "jest": "27.5.1",
+    "supertest": "6.2.2"
   }
 }

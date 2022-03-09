@@ -1,5 +1,6 @@
 # express_boilerplate
 express boilerplate code
+node v 12
 
 curl --location --request POST 'http://localhost:3000/v1/users/createUser' \
 --header 'Content-Type: application/json' \

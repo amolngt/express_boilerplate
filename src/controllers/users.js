@@ -20,8 +20,11 @@ const createUser = catchAsync(async (req, res) => {
 
 const getUsers = catchAsync(async (req, res) => {
   if(localStorage.getItem('users')!= null){
-    const result =JSON.parse(localStorage.getItem('users'))
-    res.send(result);
+    const result =JSON.parse(localStorage.getItem('users'));
+    if (!result || result.length<=0) {
+      throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+    }
+    res.status(httpStatus.OK).send(result);
   }else{
     throw new ApiError(httpStatus.NOT_FOUND, 'Users not found');
   }
@@ -39,14 +42,15 @@ const getUser = catchAsync(async (req, res) => {
   }
  
   const user = users.filter(u => u.id === id);
-  if (!user) {
+  if (!user || user.length<=0) {
     throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
   }
-  res.send(user);
+  res.status(httpStatus.OK).send(user);
 });
 
 const updateUser = catchAsync(async (req, res) => {
   const id= parseInt(req.body.id);
+  let f= false;
   if(!id){
     throw new ApiError(httpStatus.NOT_FOUND, 'Plz enter id');
   }
@@ -54,10 +58,14 @@ const updateUser = catchAsync(async (req, res) => {
     users =JSON.parse(localStorage.getItem('users'))
     users.map(u=> {
       if(id === u.id){
+        f= true;
         u.name= req.body.name;
         u.class= req.body.class;
       }
     });
+    if(f=== false){
+      throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+    }
     localStorage.setItem('users',JSON.stringify(users))
     res.status(httpStatus.OK).send({message:"Updated"});
   }else{
@@ -68,6 +76,7 @@ const updateUser = catchAsync(async (req, res) => {
 
 const deleteUser = catchAsync(async (req, res) => {
   const id= parseInt(req.body.id);
+  let f= false;
   if(!id){
     throw new ApiError(httpStatus.NOT_FOUND, 'Plz enter id');
   }
@@ -75,7 +84,11 @@ const deleteUser = catchAsync(async (req, res) => {
     let users =JSON.parse(localStorage.getItem('users'))
     const index= users.map((u)=> u.id).indexOf(id);
     if (index > -1) {
+      f= true;
       users.splice(index, 1);
+    }
+    if(f=== false){
+      throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
     }
     localStorage.setItem('users',JSON.stringify(users))
     res.status(httpStatus.OK).send({message:"Deleted"});

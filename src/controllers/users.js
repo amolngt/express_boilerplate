@@ -33,7 +33,7 @@ const getUsers = catchAsync(async (req, res) => {
 const getUser = catchAsync(async (req, res) => {
   const id= parseInt(req.params.id);
   if(!id){
-    throw new ApiError(httpStatus.NOT_FOUND, 'Plz enter id');
+    throw new ApiError(httpStatus.NOT_FOUND, 'Please enter id');
   }
   if(localStorage.getItem('users')!= null){
     users =JSON.parse(localStorage.getItem('users'))
@@ -52,7 +52,7 @@ const updateUser = catchAsync(async (req, res) => {
   const id= parseInt(req.body.id);
   let f= false;
   if(!id){
-    throw new ApiError(httpStatus.NOT_FOUND, 'Plz enter id');
+    throw new ApiError(httpStatus.NOT_FOUND, 'Please enter id');
   }
   if(localStorage.getItem('users')!= null){
     users =JSON.parse(localStorage.getItem('users'))
@@ -78,7 +78,7 @@ const deleteUser = catchAsync(async (req, res) => {
   const id= parseInt(req.body.id);
   let f= false;
   if(!id){
-    throw new ApiError(httpStatus.NOT_FOUND, 'Plz enter id');
+    throw new ApiError(httpStatus.NOT_FOUND, 'Please enter id');
   }
   if(localStorage.getItem('users')!= null){
     let users =JSON.parse(localStorage.getItem('users'))

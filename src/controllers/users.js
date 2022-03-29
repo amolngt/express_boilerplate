@@ -1,100 +1,41 @@
 const httpStatus = require('http-status');
-const ApiError = require('../utils/ApiError');
 const catchAsync = require('../utils/catchAsync');
-const localStorage =require('localStorage')
-// const { userService } = require('../services');
-let users=[]
+const Users = require('../services/users');
+
 const createUser = catchAsync(async (req, res) => {
-  const user = {
+  const opts = {
     id:Date.parse(new Date()),
     name: req.body.name,
     class: req.body.class
   }
-  if(localStorage.getItem('users')!= null){
-    users =JSON.parse(localStorage.getItem('users'))
-  }
-  users.push(user)
-  localStorage.setItem('users',JSON.stringify(users))
+
+  const userService= new Users();
+  const user = userService.createUser(opts)
   res.status(httpStatus.CREATED).send(user);
 });
 
 const getUsers = catchAsync(async (req, res) => {
-  if(localStorage.getItem('users')!= null){
-    const result =JSON.parse(localStorage.getItem('users'));
-    if (!result || result.length<=0) {
-      throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
-    }
-    res.status(httpStatus.OK).send(result);
-  }else{
-    throw new ApiError(httpStatus.NOT_FOUND, 'Users not found');
-  }
+  const userService= new Users();
+  const result= userService.getUsers();
+  res.status(httpStatus.OK).send(result);
 });
 
 const getUser = catchAsync(async (req, res) => {
-  const id= parseInt(req.params.id);
-  if(!id){
-    throw new ApiError(httpStatus.NOT_FOUND, 'Please enter id');
-  }
-  if(localStorage.getItem('users')!= null){
-    users =JSON.parse(localStorage.getItem('users'))
-  }else{
-    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
-  }
- 
-  const user = users.filter(u => u.id === id);
-  if (!user || user.length<=0) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
-  }
+  const userService= new Users();
+  const user= userService.getUser({id: req.params.id})
   res.status(httpStatus.OK).send(user);
 });
 
 const updateUser = catchAsync(async (req, res) => {
-  const id= parseInt(req.body.id);
-  let f= false;
-  if(!id){
-    throw new ApiError(httpStatus.NOT_FOUND, 'Please enter id');
-  }
-  if(localStorage.getItem('users')!= null){
-    users =JSON.parse(localStorage.getItem('users'))
-    users.map(u=> {
-      if(id === u.id){
-        f= true;
-        u.name= req.body.name;
-        u.class= req.body.class;
-      }
-    });
-    if(f=== false){
-      throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
-    }
-    localStorage.setItem('users',JSON.stringify(users))
-    res.status(httpStatus.OK).send({message:"Updated"});
-  }else{
-    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
-  }
+  const userService= new Users();
+  const user= userService.updateUser({id: req.body.id, name:req.body.name,class: req.body.class})
   res.send(user);
 });
 
 const deleteUser = catchAsync(async (req, res) => {
-  const id= parseInt(req.body.id);
-  let f= false;
-  if(!id){
-    throw new ApiError(httpStatus.NOT_FOUND, 'Please enter id');
-  }
-  if(localStorage.getItem('users')!= null){
-    let users =JSON.parse(localStorage.getItem('users'))
-    const index= users.map((u)=> u.id).indexOf(id);
-    if (index > -1) {
-      f= true;
-      users.splice(index, 1);
-    }
-    if(f=== false){
-      throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
-    }
-    localStorage.setItem('users',JSON.stringify(users))
-    res.status(httpStatus.OK).send({message:"Deleted"});
-  }else{
-    throw new ApiError(httpStatus.NOT_FOUND, 'Users not found');
-  }
+  const userService= new Users();
+  const result= userService.deleteUser({id: req.body.id})
+  res.status(httpStatus.OK).send(result);
 });
 
 module.exports = {
